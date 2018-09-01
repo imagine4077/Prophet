@@ -1,4 +1,4 @@
-package com.hackthon.prophet;
+package com.hackathon.prophet;
 
 
 import org.springframework.boot.SpringApplication;

@@ -1,4 +1,4 @@
-package com.hackthon.prophet.pojo;
+package com.hackathon.prophet.pojo;
 
 import lombok.Data;
 

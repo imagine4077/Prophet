@@ -1,7 +1,7 @@
-package com.hackthon.prophet;
+package com.hackathon.prophet;
 
 
-import com.hackthon.prophet.service.impl.NlpServiceImpl;
+import com.hackathon.prophet.service.impl.NlpServiceImpl;
 
 
 public class TestApplication

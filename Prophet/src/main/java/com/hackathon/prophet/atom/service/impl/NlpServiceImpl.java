@@ -1,6 +1,6 @@
-package com.hackthon.prophet.service.impl;
+package com.hackathon.prophet.service.impl;
 
-import com.hackthon.prophet.service.NlpService;
+import com.hackathon.prophet.service.NlpService;
 import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.SegToken;
 

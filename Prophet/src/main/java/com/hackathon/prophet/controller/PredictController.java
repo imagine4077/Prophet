@@ -1,7 +1,6 @@
-package com.hackthon.prophet.controller;
+package com.hackathon.prophet.controller;
 
-import com.hackthon.prophet.pojo.SingleDtsBase;
-import com.huaban.analysis.jieba.SegToken;
+import com.hackathon.prophet.pojo.SingleDtsBase;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
