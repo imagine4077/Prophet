@@ -1,4 +1,4 @@
-package com.hackathon.prophet.service;
+package com.hackathon.prophet.atom.service;
 
 import com.huaban.analysis.jieba.SegToken;
 
