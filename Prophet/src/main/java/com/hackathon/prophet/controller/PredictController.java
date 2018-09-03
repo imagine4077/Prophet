@@ -11,7 +11,7 @@ import java.util.List;
 @Controller
 public class PredictController
 {
-    @RequestMapping(value = "/dts/similarities", method = RequestMethod.GET)
+    @RequestMapping(value = "/similarities", method = RequestMethod.GET)
     public List<SingleDtsBase> findSimilarDtsByUrl(
             @RequestParam(name = "url") String url
     )
