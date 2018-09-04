@@ -1,12 +1,12 @@
 package com.hackathon.prophet.atom.service.impl;
 
-import com.hackathon.prophet.atom.service.NlpService;
+import com.hackathon.prophet.atom.service.SegementationService;
 import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.SegToken;
 
 import java.util.List;
 
-public class NlpServiceImpl implements NlpService
+public class SegementationServiceImpl implements SegementationService
 {
     private static JiebaSegmenter segmenter = new JiebaSegmenter();
 
@@ -19,10 +19,5 @@ public class NlpServiceImpl implements NlpService
     public List<SegToken> segmentWordsBySearchMode(String text)
     {
         return segmenter.process(text, JiebaSegmenter.SegMode.SEARCH);
-    }
-
-    @Override
-    public String filterHtlmTags(String text) {
-        return null;
     }
 }
