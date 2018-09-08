@@ -7,4 +7,6 @@ public class SingleDtsBase
 {
     private String id;
     private SingleDtsDescription description;
+
+    private String similarDtsId;
 }
