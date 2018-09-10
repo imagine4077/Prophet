@@ -49,7 +49,7 @@ public class IkanalyzerSegementationServiceImpl implements SegementationService 
         List<String> stopWordList = null;
         File stopWordFile = new File(IkanalyzerSegementationServiceImpl.class.getClassLoader().getResource("stopwords.dic").getPath());
         try {
-            stopWordList = FileUtils.readLines(stopWordFile, Constants.DEFAULT_CHARACTER_ENCODING);
+            stopWordList = FileUtils.readLines(stopWordFile);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("fail to load stop word dictionary");
