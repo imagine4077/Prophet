@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 public class CollectionUtils
 {
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+    public static <K, V extends Comparable<? super V>> Map<K, V> mapSortByValue(Map<K, V> map) {
         Map<K, V> result = new LinkedHashMap<>();
         Stream<Map.Entry<K, V>> st = map.entrySet().stream();
 

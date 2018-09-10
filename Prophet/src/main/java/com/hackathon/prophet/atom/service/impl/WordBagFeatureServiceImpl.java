@@ -4,6 +4,7 @@ import com.hackathon.prophet.atom.service.FeatureService;
 import com.hackathon.prophet.atom.service.SegementationService;
 import com.hackathon.prophet.dao.DataIO;
 import com.hackathon.prophet.dao.DataObject;
+import com.hackathon.prophet.pojo.FeatureFingerPrint;
 import com.hackathon.prophet.pojo.SingleDtsBase;
 import com.hackathon.prophet.utils.CollectionUtils;
 import com.hackathon.prophet.utils.HtmlUtils;
@@ -34,19 +35,21 @@ public class WordBagFeatureServiceImpl implements FeatureService {
     SegementationService segementationService;
 
     @Override
-    public List<Float> getFeature(SingleDtsBase dts) {
-        List<Float> feature = new ArrayList<>(this.dimension);
+    public FeatureFingerPrint getFeature(SingleDtsBase dts) {
+        //若词袋未初始化，则初始化
         if(null == wordBag)
         {
             this.getWordBag();
         }
 
+        float[] feature = new float[this.dimension];
+
         for(String word:this.descriptionWordSegment(dts))
         {
             int index = wordBag.indexOf(word);
-            feature.set(index, feature.get(index)+1);
+            feature[index] = feature[index]+1F;
         }
-        return feature;
+        return new FeatureFingerPrint(feature);
     }
 
     @Override
@@ -66,7 +69,7 @@ public class WordBagFeatureServiceImpl implements FeatureService {
                 }
 
                 // reduce dimension by config
-                tmpMap = CollectionUtils.sortByValue(tmpMap);
+                tmpMap = CollectionUtils.mapSortByValue(tmpMap);
                 idf = new LinkedHashMap<>();
                 int i = 0;
                 for (Map.Entry<String, Integer> entry : tmpMap.entrySet()) {
