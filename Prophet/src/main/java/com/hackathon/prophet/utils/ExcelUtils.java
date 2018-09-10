@@ -1,22 +1,29 @@
 package com.hackathon.prophet.utils;
 
 import com.hackathon.prophet.constant.FileConstants;
+import com.hackathon.prophet.pojo.SingleDtsBase;
+import jxl.Cell;
+import jxl.CellView;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
 import net.sf.jxls.reader.ReaderBuilder;
 import net.sf.jxls.reader.XLSReader;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.xml.sax.SAXException;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import jxl.Sheet;
+import jxl.Workbook;
 
 public class ExcelUtils {
 
@@ -65,6 +72,29 @@ public class ExcelUtils {
             IOUtils.closeQuietly(jxlsConfigInputStream);
         }
         return result;
+    }
+
+    public static void writeExcel(List<SingleDtsBase> records, File file) throws IOException, WriteException, RowsExceededException {
+        WritableWorkbook workbook = null;
+        try
+        {
+            workbook = Workbook.createWorkbook(file);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        WritableSheet sheet = workbook.createSheet("sheetName", 0);
+        // add a blank row
+        for (SingleDtsBase record : records)
+        {
+            Label label1 = new Label(0,0,"id");
+            sheet.addCell(label1);
+        }
+        sheet.insertRow(sheet.getRows());
+        // create label from object, then insert
+        workbook.write();
+        workbook.close();
     }
 
 }
