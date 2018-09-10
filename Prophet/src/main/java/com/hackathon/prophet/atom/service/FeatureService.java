@@ -1,5 +1,8 @@
 package com.hackathon.prophet.atom.service;
 
+import com.hackathon.prophet.pojo.FeatureFingerPrint;
+import com.hackathon.prophet.pojo.SingleDtsBase;
+
 import java.util.List;
 
 public interface FeatureService
@@ -7,7 +10,7 @@ public interface FeatureService
     /**
      * 提取单个DTS的特征
      * */
-    float[] getFeature();
+    FeatureFingerPrint getFeature(SingleDtsBase dts);
 
     /**
      * 获得词袋

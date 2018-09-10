@@ -2,6 +2,9 @@ package com.hackathon.prophet;
 
 
 import com.hackathon.prophet.atom.service.impl.JiebaSegementationServiceImpl;
+import com.hackathon.prophet.utils.CollectionUtils;
+
+import java.util.*;
 
 
 public class TestApplication
@@ -16,11 +19,23 @@ public class TestApplication
 
     public void run()
     {
-        String text = "现有Doc-word矩阵，采用余弦计算两两文档之间的相似度。" +
-                "在实际问题中，矩阵通常是很稀疏的，为了减少计算量，" +
-                "通常采用倒排索引的数据结构";
-        JiebaSegementationServiceImpl nlpService = new JiebaSegementationServiceImpl();
-        //System.out.println(nlpService.segmentWordsByIndexMode(text).toString());
-        System.out.println(nlpService.segmentWordsBySearchMode(text).toString());
+        // Test mapSortByValue
+        Map<String, Integer> idf = new LinkedHashMap<>();
+        idf.put("word2", 2);
+        idf.put("cord1", 1);
+        idf.put("aord3", 3);
+        idf = CollectionUtils.mapSortByValue(idf);
+        for(Map.Entry<String, Integer> entry: idf.entrySet())
+        {
+            System.out.println("KEY: " + entry.getKey() + ", VALUE: " + entry.getValue());
+        }
+
+        // Test list initialization
+        System.out.println("==================================");
+        float[] feature = new float[5];
+        feature[2] = 6F;
+        for(float f: feature){
+            System.out.println(f);
+        }
     }
 }

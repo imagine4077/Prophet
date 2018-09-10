@@ -3,7 +3,7 @@ package com.hackathon.prophet.config;
 import com.hackathon.prophet.atom.service.FeatureService;
 import com.hackathon.prophet.atom.service.SegementationService;
 import com.hackathon.prophet.atom.service.impl.IkanalyzerSegementationServiceImpl;
-import com.hackathon.prophet.atom.service.impl.TfidfFeatureServiceImpl;
+import com.hackathon.prophet.atom.service.impl.WordBagFeatureServiceImpl;
 import com.hackathon.prophet.atom.service.impl.Word2vecFeatureServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +34,7 @@ public class ProphetConfig
         }
         else
         {
-            return new TfidfFeatureServiceImpl();
+            return new WordBagFeatureServiceImpl();
         }
     }
 }

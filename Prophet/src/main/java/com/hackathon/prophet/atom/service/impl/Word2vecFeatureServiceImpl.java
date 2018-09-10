@@ -1,13 +1,15 @@
 package com.hackathon.prophet.atom.service.impl;
 
 import com.hackathon.prophet.atom.service.FeatureService;
+import com.hackathon.prophet.pojo.FeatureFingerPrint;
+import com.hackathon.prophet.pojo.SingleDtsBase;
 
 import java.util.List;
 
 public class Word2vecFeatureServiceImpl implements FeatureService
 {
     @Override
-    public float[] getFeature()
+    public FeatureFingerPrint getFeature(SingleDtsBase dts)
     {
         return null;
     }
