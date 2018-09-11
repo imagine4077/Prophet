@@ -27,10 +27,8 @@ import jxl.Workbook;
 
 public class ExcelUtils {
 
-    private static final String CONF = "/excelMapper.xml";
-
-    public static <T> List<T> parse(File file, Class<T> clazz) {
-        InputStream configIs = ExcelUtils.class.getResourceAsStream(CONF);
+    public static <T> List<T> parse(File file, Class<T> clazz, String xml) {
+        InputStream configIs = ExcelUtils.class.getResourceAsStream(xml);
         InputStream excelIs = null;
         try {
             excelIs = new FileInputStream(file);

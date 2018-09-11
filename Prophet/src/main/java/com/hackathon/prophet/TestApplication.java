@@ -4,6 +4,7 @@ package com.hackathon.prophet;
 import com.hackathon.prophet.atom.service.impl.JiebaSegementationServiceImpl;
 import com.hackathon.prophet.utils.CollectionUtils;
 
+import java.io.File;
 import java.util.*;
 
 
@@ -33,6 +34,14 @@ public class TestApplication
         // Test list initialization
         System.out.println("==================================");
         float[] feature = new float[5];
+        feature[2] = 6F;
+        for(float f: feature){
+            System.out.println(f);
+        }
+
+        // Test list initialization
+        System.out.println("==================================");
+        File train = new File(TestApplication.class.getClassLoader().getResource("train.xslx"));
         feature[2] = 6F;
         for(float f: feature){
             System.out.println(f);

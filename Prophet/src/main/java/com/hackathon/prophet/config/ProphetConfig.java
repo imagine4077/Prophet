@@ -1,10 +1,9 @@
 package com.hackathon.prophet.config;
 
+import com.hackathon.prophet.atom.service.DistanceService;
 import com.hackathon.prophet.atom.service.FeatureService;
 import com.hackathon.prophet.atom.service.SegementationService;
-import com.hackathon.prophet.atom.service.impl.IkanalyzerSegementationServiceImpl;
-import com.hackathon.prophet.atom.service.impl.WordBagFeatureServiceImpl;
-import com.hackathon.prophet.atom.service.impl.Word2vecFeatureServiceImpl;
+import com.hackathon.prophet.atom.service.impl.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +15,15 @@ public class ProphetConfig
 
     private static String WORD2VEC_FEATURE_TYPE = "word2vec";
 
+    private static String COS_DISTANCE = "cos";
+
+    private static String EUCLID_DISTANCE = "Euclid";
+
     @Value("${feature.type:tfidf}")
     String featureType;
+
+    @Value("${distance.type:cos}")
+    String distanceType;
 
     @Bean
     public SegementationService segementationServiceBean()
@@ -35,6 +41,18 @@ public class ProphetConfig
         else
         {
             return new WordBagFeatureServiceImpl();
+        }
+    }
+
+    @Bean
+    public DistanceService distanceServiceBean()
+    {
+        if(this.distanceType.equalsIgnoreCase(EUCLID_DISTANCE))
+        {
+            return new EuclidDistanceServiceImpl();
+        }
+        else { // 默认使用余弦距离
+            return new CosDistanceServiceImpl();
         }
     }
 }

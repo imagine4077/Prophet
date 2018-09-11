@@ -2,13 +2,14 @@
 <workbook>
     <worksheet name="问题单表格">
         <section startRow="0" endRow="0" />
-        <loop startRow="1" endRow="1" item="result" var="dtsInfo" varType="com.hackathon.prophet.pojo.SingleDtsBase">
+        <loop startRow="1" endRow="1" items="result" var="dtsInfo" varType="com.hackathon.prophet.pojo.SingleDtsBase">
             <section startRow="1" endRow="1">
                 <mapping row="1" col="0">dtsInfo.id</mapping>
-                <mapping row="1" col="2">dtsInfo.version</mapping>
-                <mapping row="1" col="3">dtsInfo.id</mapping>
-                <mapping row="1" col="4">dtsInfo.id</mapping>
-                <mapping row="1" col="5">dtsInfo.id</mapping>
+                <mapping row="1" col="1">dtsInfo.severity</mapping>
+                <mapping row="1" col="2">dtsInfo.reappearable</mapping>
+                <mapping row="1" col="3">dtsInfo.simpleDescription</mapping>
+                <mapping row="1" col="4">dtsInfo.detailDescription</mapping>
+                <mapping row="1" col="5">dtsInfo.similarDts</mapping>
             </section>
             <loopbreakcondition>
                 <rowcheck offset="0">

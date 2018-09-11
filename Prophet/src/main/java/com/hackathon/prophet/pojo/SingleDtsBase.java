@@ -10,25 +10,25 @@ public class SingleDtsBase
 {
     private String id;
     private String severity;
-    private boolean reappearable;
+    private String reappearable;
     private String simpleDescription;
     private String detailDescription;
-    private List<SingleDtsBase> similarDts;
+    private String similarDts;
 
     public SingleDtsBase(String id, String severity
-            , boolean reappearable, String simpleDescription
-            , String detailDescription, boolean createSimilarDts)
+            , String reappearable, String simpleDescription
+            , String detailDescription, String similarDts)
     {
         this.id = id;
         this.severity = severity;
         this.reappearable = reappearable;
         this.simpleDescription = simpleDescription;
         this.detailDescription = detailDescription;
-        this.similarDts = createSimilarDts?new ArrayList<>():null;
+        this.similarDts = similarDts;
     }
 
     public SingleDtsBase(String id, String severity
-            , boolean reappearable, String simpleDescription
+            , String reappearable, String simpleDescription
             , String detailDescription)
     {
         this.id = id;
@@ -43,13 +43,23 @@ public class SingleDtsBase
      * 将简化描述和具体描述合并，视为一个文本处理。
      * */
     public SingleDtsBase(String id, String severity
-            , boolean reappearable, String Description)
+            , String reappearable, String Description)
     {
         this.id = id;
         this.severity = severity;
         this.reappearable = reappearable;
         this.simpleDescription = null;
         this.detailDescription = detailDescription;
+        this.similarDts = null;
+    }
+
+    public SingleDtsBase(String id)
+    {
+        this.id = id;
+        this.severity = null;
+        this.reappearable = null;
+        this.simpleDescription = null;
+        this.detailDescription = null;
         this.similarDts = null;
     }
 }
