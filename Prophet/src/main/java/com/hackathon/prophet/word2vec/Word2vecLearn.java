@@ -430,12 +430,11 @@ public class Word2vecLearn {
         this.isCbow = isCbow;
     }
 
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         Word2vecLearn learn = new Word2vecLearn();
         long start = System.currentTimeMillis();
         learn.learnFile(new File("/Users/albert/Documents/OnGoing/word2vec/Word2VEC_java/src/main/resource/library/xh.txt"));
         System.out.println("use time " + (System.currentTimeMillis() - start));
         learn.saveModel(new File("/Users/albert/Documents/OnGoing/word2vec/Word2VEC_java/src/main/resource/library/javaVector"));
-
-    }
+    }*/
 }

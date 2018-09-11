@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Word2VEC {
 
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
 
         // Learn learn = new Learn();
         // learn.learnFile(new File("library/xh.txt"));
@@ -44,7 +44,7 @@ public class Word2VEC {
         // //男人 国王 女人
         // System.out.println(vec.analogy("邓小平", "毛泽东思想", "毛泽东"));
         // System.out.println(vec2.analogy("毛泽东", "毛泽东思想", "邓小平"));
-    }
+    }*/
 
     private HashMap<String, float[]> wordMap = new HashMap<String, float[]>();
 

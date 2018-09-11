@@ -57,8 +57,8 @@ public class IkanalyzerSegementationServiceImpl implements SegementationService 
         return stopWordList;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         List<String> t = getAnalyzerResult("不同于计算机，人类一睁眼就能迅速看到和看明白一个场景，因为人的大脑皮层至少有一半以上海量神经元参与了视觉任务的完成。");
         System.out.println(t);
-    }
+    }*/
 }

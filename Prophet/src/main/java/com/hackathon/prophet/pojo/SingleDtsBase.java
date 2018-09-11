@@ -2,9 +2,6 @@ package com.hackathon.prophet.pojo;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Data
 public class SingleDtsBase
 {
@@ -15,7 +12,7 @@ public class SingleDtsBase
     private String detailDescription;
     private String similarDts;
 
-    public SingleDtsBase(String id, String severity
+    /*public SingleDtsBase(String id, String severity
             , String reappearable, String simpleDescription
             , String detailDescription, String similarDts)
     {
@@ -39,9 +36,9 @@ public class SingleDtsBase
         this.similarDts = null;
     }
 
-    /**
+    *//**
      * 将简化描述和具体描述合并，视为一个文本处理。
-     * */
+     * *//*
     public SingleDtsBase(String id, String severity
             , String reappearable, String Description)
     {
@@ -61,5 +58,5 @@ public class SingleDtsBase
         this.simpleDescription = null;
         this.detailDescription = null;
         this.similarDts = null;
-    }
+    }*/
 }

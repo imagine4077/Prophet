@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Word2vecKmeans{
 
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         Word2VEC vec = new Word2VEC();
         vec.loadGoogleModel("vectors.bin");
         System.out.println("load model ok!");
@@ -19,7 +19,7 @@ public class Word2vecKmeans{
             System.out.println(explain[i].getTop(10));
         }
 
-    }
+    }*/
 
     private HashMap<String, float[]> wordMap = null;
 
