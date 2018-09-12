@@ -4,23 +4,42 @@ import com.hackathon.prophet.pojo.SingleDtsBase;
 
 import java.util.List;
 
-public class DataObject
+public class DataObject<T>
 {
-    private List<SingleDtsBase> dtses;
-
-    private String source;
+    private List<T> dtses;
 
     private int pointer;
 
-    public DataObject(List<SingleDtsBase> dts){};
-
-    public SingleDtsBase getNextLine()
+    public DataObject(List<T> dts)
     {
-        return null;
+        this.dtses = dts;
+        pointer = 0;
+    }
+
+    public T getNextLine()
+    {
+        if(this.pointer> this.dtses.size())
+        {
+            return null;
+        }
+        int index = this.pointer;
+        this.pointer++;
+        return this.dtses.get(index);
     }
 
     public boolean isDataEnd()
     {
-        return false;
+        if(this.pointer< this.dtses.size())
+        {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public void resetPointer()
+    {
+        this.pointer = 0;
     }
 }

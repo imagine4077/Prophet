@@ -2,7 +2,7 @@ package com.hackathon.prophet.dao;
 
 public interface DataIO
 {
-    DataObject getDo();
+    DataObject readTrainSet();
 
-    DataObject getDo(String source);
+    DataObject readTestSet();
 }

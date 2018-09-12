@@ -2,6 +2,7 @@ package com.hackathon.prophet;
 
 
 import com.hackathon.prophet.atom.service.impl.JiebaSegementationServiceImpl;
+import com.hackathon.prophet.dao.DataObject;
 import com.hackathon.prophet.pojo.SingleDtsBase;
 import com.hackathon.prophet.utils.CollectionUtils;
 import com.hackathon.prophet.utils.ExcelUtils;
@@ -46,8 +47,9 @@ public class TestApplication
         File train = new File(TestApplication.class.getClassLoader().getResource("dummyTest.xlsx").getPath());
         String xml = "/TestMapper.xml";
         List<SingleDtsBase> dtses = ExcelUtils.parse(train, SingleDtsBase.class, xml);
-        for(SingleDtsBase dts: dtses){
-            System.out.println(dts);
+        DataObject<SingleDtsBase> dataObject = new DataObject<>(dtses);
+        while(!dataObject.isDataEnd()){
+            System.out.println(dataObject.getNextLine());
         }
     }
 }

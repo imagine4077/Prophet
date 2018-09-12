@@ -58,8 +58,8 @@ public class WordBagFeatureServiceImpl implements FeatureService {
             synchronized (writeLock) {
                 Map<String, Integer> tmpMap = new LinkedHashMap<>();
                 while (!this.dataObject.isDataEnd()) {
-                    SingleDtsBase dts = this.dataObject.getNextLine();
-                    for (String word : descriptionWordSegment(dts)) {
+                    Object dts = this.dataObject.getNextLine();
+                    for (String word : descriptionWordSegment((SingleDtsBase) dts)) {
                         if (!tmpMap.containsKey(word)) {
                             tmpMap.put(word, 1);
                         } else {
@@ -86,7 +86,7 @@ public class WordBagFeatureServiceImpl implements FeatureService {
 
     @PostConstruct
     private void init() {
-        this.dataObject = dataIO.getDo("");
+        this.dataObject = dataIO.readTrainSet();
         this.getWordBag();
     }
 

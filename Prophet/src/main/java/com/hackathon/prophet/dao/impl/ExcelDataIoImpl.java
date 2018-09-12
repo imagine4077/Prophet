@@ -6,13 +6,13 @@ import com.hackathon.prophet.dao.DataObject;
 public class ExcelDataIoImpl implements DataIO
 {
     @Override
-    public DataObject getDo()
+    public DataObject readTrainSet()
     {
         return null;
     }
 
     @Override
-    public DataObject getDo(String source)
+    public DataObject readTestSet()
     {
         return null;
     }
