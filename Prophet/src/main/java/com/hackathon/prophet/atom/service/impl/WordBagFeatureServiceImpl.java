@@ -42,14 +42,14 @@ public class WordBagFeatureServiceImpl implements FeatureService {
             this.getWordBag();
         }
 
-        float[] feature = new float[this.dimension];
+        double[] feature = new double[this.dimension];
 
         for(String word:this.descriptionWordSegment(dts))
         {
             int index = wordBag.indexOf(word);
             feature[index] = feature[index]+1F;
         }
-        return new FeatureFingerPrint(feature);
+        return new FeatureFingerPrint(dts.getId(), feature);
     }
 
     @Override

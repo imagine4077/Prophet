@@ -8,19 +8,35 @@ import java.util.List;
 @Data
 public class FeatureFingerPrint
 {
-    List<Float> features;
+    private String id;
 
-    public FeatureFingerPrint(List<Float> features)
+    private List<Double> features;
+
+    public FeatureFingerPrint(List<Double> features)
     {
         this.features = features;
     }
 
-    public FeatureFingerPrint(float[] features)
+    public FeatureFingerPrint(String id, List<Double> features)
+    {
+        this.id = id;
+        this.features = features;
+    }
+
+    public FeatureFingerPrint(String id, double[] features)
     {
         this.features = new ArrayList<>();
-        for(float f: features)
+        for(double f: features)
         {
             this.features.add(f);
         }
+        this.id = id;
     }
+
+    public FeatureFingerPrint(SingleDtsBase dts)
+    {
+        this.id = dts.getId();
+    }
+
+    //private segment
 }
