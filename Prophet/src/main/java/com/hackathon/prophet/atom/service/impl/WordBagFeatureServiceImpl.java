@@ -79,7 +79,7 @@ public class WordBagFeatureServiceImpl implements FeatureService {
 
                 // reduce dimension by config
                 /*tmpMap = CollectionUtils.mapSortByValue(tmpMap);*/
-                tmpMap = CollectionUtils.sortMap(tmpMap);
+                tmpMap = CollectionUtils.mapSortByValueDesc(tmpMap);
                 this.dimension = this.dimension>tmpMap.size()?tmpMap.size(): this.dimension;
                 idf = new LinkedHashMap<>();
                 int i = 0;
