@@ -18,7 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.File;
 import java.util.*;
 
-@SpringBootApplication
+//@SpringBootApplication
 public class TestApplication
 {
     @Autowired
