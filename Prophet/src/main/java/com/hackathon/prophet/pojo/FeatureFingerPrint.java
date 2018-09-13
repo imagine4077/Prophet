@@ -38,5 +38,13 @@ public class FeatureFingerPrint
         this.id = dts.getId();
     }
 
-    //private segment
+    public double[] getArrayFeature()
+    {
+        double[] ret = new double[this.features.size()];
+        for(int i=0;i<this.features.size();i++)
+        {
+            ret[i] = this.features.get(i);
+        }
+        return ret;
+    }
 }

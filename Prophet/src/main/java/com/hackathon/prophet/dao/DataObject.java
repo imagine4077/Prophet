@@ -16,6 +16,16 @@ public class DataObject<T>
         pointer = 0;
     }
 
+    public int getSize()
+    {
+        return this.dtses.size();
+    }
+
+    public int getPointer()
+    {
+        return this.pointer;
+    }
+
     public T getNextLine()
     {
         if(this.pointer> this.dtses.size())

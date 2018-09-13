@@ -1,20 +1,35 @@
 package com.hackathon.prophet;
 
 
+import com.hackathon.prophet.atom.service.DimensionalityService;
+import com.hackathon.prophet.atom.service.FeatureService;
+import com.hackathon.prophet.atom.service.SegementationService;
 import com.hackathon.prophet.atom.service.impl.JiebaSegementationServiceImpl;
+import com.hackathon.prophet.atom.service.impl.PcaDimensionalityServiceImpl;
 import com.hackathon.prophet.dao.DataObject;
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
 import com.hackathon.prophet.pojo.SingleDtsBase;
 import com.hackathon.prophet.utils.CollectionUtils;
 import com.hackathon.prophet.utils.ExcelUtils;
 import com.hackathon.prophet.utils.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
 import java.util.*;
 
-
+@SpringBootApplication
 public class TestApplication
 {
+    @Autowired
+    private SegementationService segementationService;
+
+    @Autowired
+    private DimensionalityService dimensionalityService;
+
+    @Autowired
+    private FeatureService featureService;
+
     public static void main(String[] args)
     {
         System.out.println("Hello prophet!");
@@ -68,6 +83,26 @@ public class TestApplication
         {
             System.out.println(f);
         }
+
+        // Test PCA
+        TestApplication t = new TestApplication();
+
+        List<String> wordBag = t.featureService.getWordBag();
+        dataObject.resetPointer();
+
+             // 获取训练机矩阵
+        List<double[]> trainMatrix = new ArrayList<>();
+        while(!dataObject.isDataEnd())
+        {
+            SingleDtsBase dts = dataObject.getNextLine();
+            FeatureFingerPrint fingerPrint = t.featureService.getFeature(dts);
+            trainMatrix.add(fingerPrint.getArrayFeature());
+            System.out.println(fingerPrint);
+        }
+
+             // 获取主成分矩阵矩阵
+        PcaDimensionalityServiceImpl pca = new PcaDimensionalityServiceImpl();
+        pca.trainTransformMatrix((double[][]) trainMatrix.toArray());
 
         // Test kmeans
     }
