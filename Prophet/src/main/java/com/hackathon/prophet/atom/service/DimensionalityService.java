@@ -8,5 +8,5 @@ public interface DimensionalityService
     void trainTransformMatrix(double[][] primaryArray);
 
     // 对primaryArray矩阵做PCA降维
-    Matrix getPrincipalMatrix(double[][] primaryArray);
+    Matrix getReducedMatrix(double[][] primaryArray);
 }

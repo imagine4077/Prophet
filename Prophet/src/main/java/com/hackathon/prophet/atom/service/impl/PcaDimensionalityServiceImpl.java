@@ -11,6 +11,7 @@ import java.util.TreeMap;
 
 import Jama.Matrix;
 import com.hackathon.prophet.atom.service.DimensionalityService;
+import com.hackathon.prophet.utils.MatrixUtils;
 
 /*
  * 算法步骤:
@@ -26,9 +27,7 @@ public class PcaDimensionalityServiceImpl implements DimensionalityService
 
     private static final double threshold = 0.95;// 特征值阈值
 
-    private double[][] eigenVectorMatrix = null;
-
-    private double[][] eigenValueMatrix = null;
+    private Matrix principalMatrix;
 
     /**
      * 获得主成分
@@ -40,17 +39,19 @@ public class PcaDimensionalityServiceImpl implements DimensionalityService
         // 获得协方差矩阵
         double[][] varMatrix = this.getVarianceMatrix(averageArray);
         // 特征值矩阵
-        this.eigenValueMatrix = this.getEigenvalueMatrix(varMatrix);
+        double[][] eigenValueMatrix = this.getEigenvalueMatrix(varMatrix);
         // 特征向量矩阵
-        this.eigenVectorMatrix = this.getEigenVectorMatrix(varMatrix);
+        double[][] eigenVectorMatrix = this.getEigenVectorMatrix(varMatrix);
+        // 获得主成分矩阵
+        this.principalMatrix = this.getPrincipalComponent(primaryArray,
+                eigenValueMatrix, eigenVectorMatrix);
     }
 
     // 对primaryArray矩阵做PCA降维
     @Override
-    public Matrix getPrincipalMatrix(double[][] primaryArray){
-        Matrix principalMatrix = this.getPrincipalComponent(primaryArray,
-                this.eigenValueMatrix, this.eigenVectorMatrix);
-        return principalMatrix;
+    public Matrix getReducedMatrix(double[][] primaryArray){
+        Matrix result = getResult(primaryArray, this.principalMatrix);
+        return result;
     }
 
     public static double[][] matrix2DoubleArray(Matrix matrix)

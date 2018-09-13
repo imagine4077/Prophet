@@ -44,7 +44,7 @@ public class NormalProphetImpl implements Prophet
         this.dataObject.resetPointer();
         for(FeatureFingerPrint fingerPrint: this.trainSetfingerPrints)
         {
-            double[][] feature = pca.getPrincipalMatrix(fingerPrint.getMatrixFeature()).getArray();
+            double[][] feature = pca.getReducedMatrix(fingerPrint.getMatrixFeature()).getArray();
         }
     }
 
