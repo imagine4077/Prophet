@@ -1,6 +1,7 @@
 package com.hackathon.prophet.utils;
 
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
+import com.hackathon.prophet.pojo.SingleDtsBase;
 import com.hackathon.prophet.word2vec.domain.Neuron;
 import com.hackathon.prophet.word2vec.domain.WordNeuron;
 
@@ -63,6 +64,32 @@ public class FileUtils
         return ret;
     }
 
+    /**
+     * 保存模型
+     */
+    public static void saveSegmentForWord2vec(File file, List<String> words, boolean append) {
+        String data = convertWordsToLineData(words);
+        synchronized (Lock) {
+            BufferedWriter bw = null;
+            try {
+                if(!file.exists())
+                {
+                    file.createNewFile();
+                }
+                bw = new BufferedWriter(new FileWriter(file.toString(), append));
+                bw.write(data);
+                bw.newLine();
+                bw.close();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+            finally {
+
+            }
+        }
+    }
+
     private static String encodeVector(FeatureFingerPrint feature)
     {
         StringBuffer ret = new StringBuffer();
@@ -87,5 +114,16 @@ public class FileUtils
             vec.add(Double.parseDouble(v));
         }
         return new FeatureFingerPrint(id, vec);
+    }
+
+    private static String convertWordsToLineData(List<String> words)
+    {
+        StringBuffer str = new StringBuffer();
+        for(int i=0;i<(words.size()-1);i++)
+        {
+            str.append(words.get(i)+" ");
+        }
+        str.append( words.get(words.size()-1));
+        return str.toString();
     }
 }

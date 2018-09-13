@@ -52,8 +52,11 @@ public class WordBagFeatureServiceImpl implements FeatureService {
 
         for(String word:this.descriptionWordSegment(dts))
         {
-            int index = wordBag.indexOf(word);
-            feature[index] = feature[index]+1F;
+            if(wordBag.contains(word))
+            {
+                int index = wordBag.indexOf(word);
+                feature[index] = feature[index]+1F;
+            }
         }
         return new FeatureFingerPrint(dts.getId(), feature);
     }
@@ -75,18 +78,25 @@ public class WordBagFeatureServiceImpl implements FeatureService {
                 }
 
                 // reduce dimension by config
-                tmpMap = CollectionUtils.mapSortByValue(tmpMap);
+                /*tmpMap = CollectionUtils.mapSortByValue(tmpMap);*/
+                tmpMap = CollectionUtils.sortMap(tmpMap);
+                this.dimension = this.dimension>tmpMap.size()?tmpMap.size(): this.dimension;
                 idf = new LinkedHashMap<>();
                 int i = 0;
                 for (Map.Entry<String, Integer> entry : tmpMap.entrySet()) {
+                    // FIXME 在全体训练集中仅出现一次的词，我们认为可能是无意义词,不统计这样的词，用以降维
+                    if(entry.getValue()>1)
+                    {
+                        idf.put(entry.getKey(), entry.getValue());
+                        i++;
+                    }
                     if (i >= this.dimension) {
                         break;
                     }
-                    idf.put(entry.getKey(), entry.getValue());
                 }
                 wordBag = new ArrayList<>(idf.keySet());
             }
-            this.dimension = this.dimension>wordBag.size()?wordBag.size(): this.dimension;
+            this.dimension = wordBag.size();
         }
         return wordBag;
     }

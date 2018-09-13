@@ -45,6 +45,7 @@ public class NormalProphetImpl implements Prophet
         for(FeatureFingerPrint fingerPrint: this.trainSetfingerPrints)
         {
             double[][] feature = pca.getReducedMatrix(fingerPrint.getMatrixFeature()).getArray();
+            System.out.println(feature);
         }
     }
 
