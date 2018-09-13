@@ -6,6 +6,7 @@ import com.hackathon.prophet.atom.service.FeatureService;
 import com.hackathon.prophet.atom.service.SegementationService;
 import com.hackathon.prophet.atom.service.impl.JiebaSegementationServiceImpl;
 import com.hackathon.prophet.atom.service.impl.PcaDimensionalityServiceImpl;
+import com.hackathon.prophet.atom.service.impl.WordBagFeatureServiceImpl;
 import com.hackathon.prophet.dao.DataObject;
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
 import com.hackathon.prophet.pojo.SingleDtsBase;
@@ -30,7 +31,7 @@ public class TestApplication
     @Autowired
     private FeatureService featureService;
 
-    public static void main(String[] args)
+    public static void main2(String[] args)
     {
         System.out.println("Hello prophet!");
 
@@ -85,9 +86,11 @@ public class TestApplication
         }
 
         // Test PCA
-        TestApplication t = new TestApplication();
+        WordBagFeatureServiceImpl featureService = new WordBagFeatureServiceImpl();
+        featureService.init();
 
-        List<String> wordBag = t.featureService.getWordBag();
+
+        List<String> wordBag = featureService.getWordBag();
         dataObject.resetPointer();
 
              // 获取训练机矩阵
@@ -95,7 +98,7 @@ public class TestApplication
         while(!dataObject.isDataEnd())
         {
             SingleDtsBase dts = dataObject.getNextLine();
-            FeatureFingerPrint fingerPrint = t.featureService.getFeature(dts);
+            FeatureFingerPrint fingerPrint = featureService.getFeature(dts);
             trainMatrix.add(fingerPrint.getArrayFeature());
             System.out.println(fingerPrint);
         }

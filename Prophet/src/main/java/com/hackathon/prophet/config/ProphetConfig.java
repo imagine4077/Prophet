@@ -1,9 +1,12 @@
 package com.hackathon.prophet.config;
 
+import com.hackathon.prophet.atom.service.DimensionalityService;
 import com.hackathon.prophet.atom.service.DistanceService;
 import com.hackathon.prophet.atom.service.FeatureService;
 import com.hackathon.prophet.atom.service.SegementationService;
 import com.hackathon.prophet.atom.service.impl.*;
+import com.hackathon.prophet.dao.DataIO;
+import com.hackathon.prophet.dao.impl.ExcelDataIoImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,5 +57,17 @@ public class ProphetConfig
         else { // 默认使用余弦距离
             return new CosDistanceServiceImpl();
         }
+    }
+
+    @Bean
+    public DataIO dataIOBean()
+    {
+        return new ExcelDataIoImpl();
+    }
+
+    @Bean
+    public DimensionalityService dimensionalityServiceBean()
+    {
+        return new PcaDimensionalityServiceImpl();
     }
 }

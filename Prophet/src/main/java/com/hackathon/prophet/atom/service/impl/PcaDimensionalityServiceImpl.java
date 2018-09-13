@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import Jama.Matrix;
+import com.hackathon.prophet.atom.service.DimensionalityService;
 
 /*
  * 算法步骤:
@@ -20,7 +21,8 @@ import Jama.Matrix;
  * 5)将特征向量按对应的特征值大小从上往下按行排列成矩阵，取前k行组成矩阵p
  * 6)Y=PX 即为降维到k维后的数据
  */
-public class PcaDimensionalityServiceImpl {
+public class PcaDimensionalityServiceImpl implements DimensionalityService
+{
 
     private static final double threshold = 0.95;// 特征值阈值
 
@@ -31,6 +33,7 @@ public class PcaDimensionalityServiceImpl {
     /**
      * 获得主成分
      * */
+    @Override
     public void trainTransformMatrix(double[][] primaryArray) {
         // 均值0化
         double[][] averageArray = this.changeAverageToZero(primaryArray);
@@ -42,6 +45,8 @@ public class PcaDimensionalityServiceImpl {
         this.eigenVectorMatrix = this.getEigenVectorMatrix(varMatrix);
     }
 
+    // 对primaryArray矩阵做PCA降维
+    @Override
     public Matrix getPrincipalMatrix(double[][] primaryArray){
         Matrix principalMatrix = this.getPrincipalComponent(primaryArray,
                 this.eigenValueMatrix, this.eigenVectorMatrix);

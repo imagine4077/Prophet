@@ -11,5 +11,6 @@ public class Application
     {
         System.out.println("Hello prophet!");
         SpringApplication.run(Application.class, args);
+        //TestApplication.main2(args);
     }
 }

@@ -1,5 +1,6 @@
 package com.hackathon.prophet.atom.service.impl;
 
+import com.hackathon.prophet.atom.service.DimensionalityService;
 import com.hackathon.prophet.atom.service.FeatureService;
 import com.hackathon.prophet.atom.service.SegementationService;
 import com.hackathon.prophet.dao.DataIO;
@@ -9,6 +10,7 @@ import com.hackathon.prophet.pojo.SingleDtsBase;
 import com.hackathon.prophet.utils.CollectionUtils;
 import com.hackathon.prophet.utils.HtmlUtils;
 import groovy.lang.Singleton;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -23,16 +25,20 @@ public class WordBagFeatureServiceImpl implements FeatureService {
 
     private static List<String> wordBag = null;
 
+    @Getter
     private DataObject dataObject;
 
     @Value("${feature.dimension:50000}")
     private int dimension;
 
     @Autowired
-    DataIO dataIO;
+    private DataIO dataIO;
 
     @Autowired
-    SegementationService segementationService;
+    private SegementationService segementationService;
+
+    @Autowired
+    private DimensionalityService dimensionalityService;
 
     @Override
     public FeatureFingerPrint getFeature(SingleDtsBase dts) {
@@ -80,12 +86,13 @@ public class WordBagFeatureServiceImpl implements FeatureService {
                 }
                 wordBag = new ArrayList<>(idf.keySet());
             }
+            this.dimension = this.dimension>wordBag.size()?wordBag.size(): this.dimension;
         }
         return wordBag;
     }
 
     @PostConstruct
-    private void init() {
+    public void init() {
         this.dataObject = dataIO.readTrainSet();
         this.getWordBag();
     }

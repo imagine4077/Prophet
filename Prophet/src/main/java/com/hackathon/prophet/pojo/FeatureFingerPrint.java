@@ -47,4 +47,12 @@ public class FeatureFingerPrint
         }
         return ret;
     }
+
+    public double[][] getMatrixFeature()
+    {
+        double[] array = this.getArrayFeature();
+        double[][] ret = new double[1][array.length];
+        ret[0] = array;
+        return ret;
+    }
 }
