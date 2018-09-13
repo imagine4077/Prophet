@@ -46,7 +46,7 @@ public class TestApplication
         idf.put("word2", 2);
         idf.put("cord1", 1);
         idf.put("aord3", 3);
-        idf = CollectionUtils.mapSortByValue(idf);
+        idf = CollectionUtils.mapSortByValueDesc(idf);
         for(Map.Entry<String, Integer> entry: idf.entrySet())
         {
             System.out.println("KEY: " + entry.getKey() + ", VALUE: " + entry.getValue());
