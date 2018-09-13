@@ -80,7 +80,6 @@ public class Word2vecFeatureServiceImpl implements FeatureService
                 }
 
                 // reduce dimension by config
-                /*tmpMap = CollectionUtils.mapSortByValue(tmpMap);*/
                 tmpMap = CollectionUtils.mapSortByValueAsc(tmpMap);
                 this.dimension = this.dimension>tmpMap.size()?tmpMap.size(): this.dimension;
                 idf = new LinkedHashMap<>();

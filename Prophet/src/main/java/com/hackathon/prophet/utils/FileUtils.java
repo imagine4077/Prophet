@@ -19,7 +19,7 @@ public class FileUtils
     private static final String SEPERATOR2 = ",";
 
     /**
-     * 保存模型
+     * 保存word bag的hash指纹
      */
     public static void saveVector(File file, FeatureFingerPrint feature) {
         String data = encodeVector(feature);
@@ -65,7 +65,7 @@ public class FileUtils
     }
 
     /**
-     * 保存模型
+     * 保存词数据用于word2vec学习
      */
     public static void saveSegmentForWord2vec(File file, List<String> words, boolean append) {
         String data = convertWordsToLineData(words);
