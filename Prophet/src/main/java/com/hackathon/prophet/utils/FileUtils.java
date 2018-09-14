@@ -1,14 +1,11 @@
 package com.hackathon.prophet.utils;
 
+import com.hackathon.prophet.pojo.DtsBase;
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
-import com.hackathon.prophet.pojo.SingleDtsBase;
-import com.hackathon.prophet.word2vec.domain.Neuron;
-import com.hackathon.prophet.word2vec.domain.WordNeuron;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class FileUtils
 {
@@ -73,7 +70,7 @@ public class FileUtils
     /**
      * 保存DTS信息
      */
-    public static void saveDtsInfo(String fileName, SingleDtsBase dts, boolean append) {
+    public static void saveDtsInfo(String fileName, DtsBase dts, boolean append) {
         File file = new File(BASE_DIR + fileName + DTS_INFO_FILE_SUFFIX);
         String data = encodeDts(dts);
         synchronized (Lock) {
@@ -97,16 +94,16 @@ public class FileUtils
         }
     }
 
-    public static SingleDtsBase loadDtsInfo(String fileName, String dtsId)
+    public static DtsBase loadDtsInfo(String fileName, String dtsId)
     {
         File file = new File(BASE_DIR + fileName + DTS_INFO_FILE_SUFFIX);
-        SingleDtsBase ret = null;
+        DtsBase ret = null;
         try (BufferedReader br = new BufferedReader(new FileReader(file.toString())))
         {
             String data = br.readLine();
             while(null != data)
             {
-                SingleDtsBase tmpDts = decodeDts(data);
+                DtsBase tmpDts = decodeDts(data);
                 if(tmpDts.getId().equalsIgnoreCase(dtsId)) {
                     ret = tmpDts;
                     break;
@@ -175,7 +172,7 @@ public class FileUtils
         return new FeatureFingerPrint(id, vec);
     }
 
-    private static String encodeDts(SingleDtsBase dts)
+    private static String encodeDts(DtsBase dts)
     {
         StringBuffer ret = new StringBuffer();
         ret.append(dts.getId()+ SEPERATOR1);
@@ -186,10 +183,10 @@ public class FileUtils
         return ret.toString();
     }
 
-    private static SingleDtsBase decodeDts(String data)
+    private static DtsBase decodeDts(String data)
     {
         String[] dataitem = data.split(SEPERATOR1);
-        SingleDtsBase ret = new SingleDtsBase();
+        DtsBase ret = new DtsBase();
         ret.setId(dataitem[0]);
         ret.setSeverity(dataitem[1]);
         ret.setReappearable(dataitem[2]);

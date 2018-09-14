@@ -6,8 +6,7 @@ import com.hackathon.prophet.atom.service.SegementationService;
 import com.hackathon.prophet.dao.DataIO;
 import com.hackathon.prophet.dao.DataObject;
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
-import com.hackathon.prophet.pojo.SingleDtsBase;
-import com.hackathon.prophet.utils.CollectionUtils;
+import com.hackathon.prophet.pojo.DtsBase;
 import com.hackathon.prophet.utils.FileUtils;
 import com.hackathon.prophet.utils.HtmlUtils;
 import com.hackathon.prophet.word2vec.Word2VEC;
@@ -17,11 +16,9 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +53,7 @@ public class Word2vecFeatureServiceImpl implements FeatureService
     private DimensionalityService dimensionalityService;
 
     @Override
-    public FeatureFingerPrint getFeature(SingleDtsBase dts) {
+    public FeatureFingerPrint getFeature(DtsBase dts) {
         //若词袋未初始化，则初始化
         if(null == wordBag)
         {
@@ -85,7 +82,7 @@ public class Word2vecFeatureServiceImpl implements FeatureService
                 // 将数据分词，并存入文本，用于训练WORD2VEC模型
                 while (!this.dataObject.isDataEnd()) {
                     Object dts = this.dataObject.getNextLine();
-                    List<String> dtsWords = descriptionWordSegment((SingleDtsBase) dts);
+                    List<String> dtsWords = descriptionWordSegment((DtsBase) dts);
                     FileUtils.saveSegmentForWord2vec(RAW_WORDS_FILE, dtsWords, true);
                 }
                 Word2vecLearn learn = new Word2vecLearn();
@@ -117,7 +114,7 @@ public class Word2vecFeatureServiceImpl implements FeatureService
         this.getWordBag();
     }
 
-    private List<String> descriptionWordSegment(SingleDtsBase dts) {
+    private List<String> descriptionWordSegment(DtsBase dts) {
         if (dts.getSimpleDescription() == null) {
             return segementationService.segmentWords(HtmlUtils.deleteAllHTMLTag(dts.getDetailDescription()));
         } else {

@@ -3,8 +3,8 @@ package com.hackathon.prophet.service.impl;
 import com.hackathon.prophet.atom.service.*;
 import com.hackathon.prophet.dao.DataIO;
 import com.hackathon.prophet.dao.DataObject;
+import com.hackathon.prophet.pojo.DtsBase;
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
-import com.hackathon.prophet.pojo.SingleDtsBase;
 import com.hackathon.prophet.service.Prophet;
 import com.hackathon.prophet.utils.CollectionUtils;
 import com.hackathon.prophet.utils.FileUtils;
@@ -89,7 +89,7 @@ public class NormalProphetImpl implements Prophet
     }
 
     @Override
-    public List<SingleDtsBase> getSimilarDts(SingleDtsBase dts)
+    public List<DtsBase> getSimilarDts(DtsBase dts)
     {
         // 获得DTS指纹
         FeatureFingerPrint fingerPrint;
@@ -114,7 +114,7 @@ public class NormalProphetImpl implements Prophet
         List<double[]> trainMatrix = new ArrayList<>();
         while(!dataObject.isDataEnd())
         {
-            SingleDtsBase dts = (SingleDtsBase)dataObject.getNextLine();
+            DtsBase dts = (DtsBase)dataObject.getNextLine();
             FeatureFingerPrint fingerPrint = featureService.getFeature(dts);
             this.trainSetFingerPrints.add(fingerPrint);
             trainMatrix.add(fingerPrint.getArrayFeature());
@@ -130,7 +130,7 @@ public class NormalProphetImpl implements Prophet
     }
 
     // 将DTS转为最终形式（已经过PCA处理）的FeatureFingerPrint。主要用于词袋模型特征场景
-    private FeatureFingerPrint dtsToReducedFeatureFingerPrint(SingleDtsBase dts)
+    private FeatureFingerPrint dtsToReducedFeatureFingerPrint(DtsBase dts)
     {
         FeatureFingerPrint fingerPrint = featureService.getFeature(dts);
         double[][] feature = pca.getReducedVectors(fingerPrint.getMatrixFeature()).getArray();
@@ -138,12 +138,12 @@ public class NormalProphetImpl implements Prophet
     }
 
     // 将DTS转为最终形式（已经过PCA处理）的FeatureFingerPrint。主要用于word2vec模型特征场景
-    private FeatureFingerPrint dtsToUnreducedFeatureFingerPrint(SingleDtsBase dts)
+    private FeatureFingerPrint dtsToUnreducedFeatureFingerPrint(DtsBase dts)
     {
         return featureService.getFeature(dts);
     }
 
-    private List<SingleDtsBase> getLsh(FeatureFingerPrint fingerPrint, SingleDtsBase dtsInfo){
+    private List<DtsBase> getLsh(FeatureFingerPrint fingerPrint, DtsBase dtsInfo){
         // 获得哈希值
         Pair<String, List<FeatureFingerPrint>> hashedPair = hashService.getHash(fingerPrint, dtsInfo, this.appendData);
         String center = hashedPair.getKey();
@@ -160,12 +160,12 @@ public class NormalProphetImpl implements Prophet
 
         // 抽取K近邻
         int i = 0;
-        List<SingleDtsBase> ret = new ArrayList<>();
+        List<DtsBase> ret = new ArrayList<>();
         for(Map.Entry<String, Double> entry: distanceMap.entrySet())
         {
             if(i<this.knnNum && entry.getValue()<this.distanceThreashold)
             {
-                SingleDtsBase similarDts = FileUtils.loadDtsInfo(center, entry.getKey());
+                DtsBase similarDts = FileUtils.loadDtsInfo(center, entry.getKey());
                 ret.add(similarDts);
             }
         }

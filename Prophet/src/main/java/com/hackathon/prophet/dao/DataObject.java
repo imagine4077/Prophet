@@ -1,7 +1,5 @@
 package com.hackathon.prophet.dao;
 
-import com.hackathon.prophet.pojo.SingleDtsBase;
-
 import java.util.List;
 
 public class DataObject<T>

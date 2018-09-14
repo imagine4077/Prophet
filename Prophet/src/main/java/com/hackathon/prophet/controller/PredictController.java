@@ -1,6 +1,6 @@
 package com.hackathon.prophet.controller;
 
-import com.hackathon.prophet.pojo.SingleDtsBase;
+import com.hackathon.prophet.pojo.DtsBase;
 import com.hackathon.prophet.service.Prophet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class PredictController
 
     @ResponseBody
     @RequestMapping(value = "url/similarities", method = RequestMethod.GET)
-    public ResponseEntity<List<SingleDtsBase>> findSimilarDtsByUrl(
+    public ResponseEntity<List<DtsBase>> findSimilarDtsByUrl(
             @RequestParam(name = "url") String url
     )
     {
@@ -28,11 +28,11 @@ public class PredictController
 
     @ResponseBody
     @RequestMapping(value = "similarities", method = RequestMethod.POST)
-    public ResponseEntity<List<SingleDtsBase>> findSimilarDts(
-            @RequestBody SingleDtsBase dts
+    public ResponseEntity<List<DtsBase>> findSimilarDts(
+            @RequestBody DtsBase dts
     )
     {
-        List<SingleDtsBase> result = this.prophet.getSimilarDts(dts);
+        List<DtsBase> result = this.prophet.getSimilarDts(dts);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

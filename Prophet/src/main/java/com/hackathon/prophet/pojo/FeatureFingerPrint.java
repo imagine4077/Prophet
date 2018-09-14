@@ -33,7 +33,7 @@ public class FeatureFingerPrint
         this.id = id;
     }
 
-    public FeatureFingerPrint(SingleDtsBase dts)
+    public FeatureFingerPrint(DtsBase dts)
     {
         this.id = dts.getId();
     }

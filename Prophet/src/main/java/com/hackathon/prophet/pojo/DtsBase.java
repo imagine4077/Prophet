@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class SingleDtsBase
+public class DtsBase
 {
     @JsonProperty(value = "id")
     private String id;
@@ -25,7 +25,7 @@ public class SingleDtsBase
     @JsonIgnore
     private String similarDts;
 
-    /*public SingleDtsBase(String id, String severity
+    /*public DtsBase(String id, String severity
             , String reappearable, String simpleDescription
             , String detailDescription, String similarDts)
     {
@@ -37,7 +37,7 @@ public class SingleDtsBase
         this.similarDts = similarDts;
     }
 
-    public SingleDtsBase(String id, String severity
+    public DtsBase(String id, String severity
             , String reappearable, String simpleDescription
             , String detailDescription)
     {
@@ -52,7 +52,7 @@ public class SingleDtsBase
     *//**
      * 将简化描述和具体描述合并，视为一个文本处理。
      * *//*
-    public SingleDtsBase(String id, String severity
+    public DtsBase(String id, String severity
             , String reappearable, String Description)
     {
         this.id = id;
@@ -63,7 +63,7 @@ public class SingleDtsBase
         this.similarDts = null;
     }
 
-    public SingleDtsBase(String id)
+    public DtsBase(String id)
     {
         this.id = id;
         this.severity = null;

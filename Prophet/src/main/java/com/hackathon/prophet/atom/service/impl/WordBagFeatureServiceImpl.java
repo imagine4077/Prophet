@@ -5,8 +5,8 @@ import com.hackathon.prophet.atom.service.FeatureService;
 import com.hackathon.prophet.atom.service.SegementationService;
 import com.hackathon.prophet.dao.DataIO;
 import com.hackathon.prophet.dao.DataObject;
+import com.hackathon.prophet.pojo.DtsBase;
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
-import com.hackathon.prophet.pojo.SingleDtsBase;
 import com.hackathon.prophet.utils.CollectionUtils;
 import com.hackathon.prophet.utils.HtmlUtils;
 import groovy.lang.Singleton;
@@ -14,7 +14,6 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Singleton
@@ -41,7 +40,7 @@ public class WordBagFeatureServiceImpl implements FeatureService {
     private DimensionalityService dimensionalityService;
 
     @Override
-    public FeatureFingerPrint getFeature(SingleDtsBase dts) {
+    public FeatureFingerPrint getFeature(DtsBase dts) {
         //若词袋未初始化，则初始化
         if(null == wordBag)
         {
@@ -68,7 +67,7 @@ public class WordBagFeatureServiceImpl implements FeatureService {
                 Map<String, Integer> tmpMap = new LinkedHashMap<>();
                 while (!this.dataObject.isDataEnd()) {
                     Object dts = this.dataObject.getNextLine();
-                    for (String word : descriptionWordSegment((SingleDtsBase) dts)) {
+                    for (String word : descriptionWordSegment((DtsBase) dts)) {
                         if (!tmpMap.containsKey(word)) {
                             tmpMap.put(word, 1);
                         } else {
@@ -107,7 +106,7 @@ public class WordBagFeatureServiceImpl implements FeatureService {
         this.getWordBag();
     }
 
-    private List<String> descriptionWordSegment(SingleDtsBase dts) {
+    private List<String> descriptionWordSegment(DtsBase dts) {
         if (dts.getSimpleDescription() == null) {
             return segementationService.segmentWords(HtmlUtils.deleteAllHTMLTag(dts.getDetailDescription()));
         } else {

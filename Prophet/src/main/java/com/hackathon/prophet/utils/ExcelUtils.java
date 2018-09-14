@@ -1,9 +1,7 @@
 package com.hackathon.prophet.utils;
 
 import com.hackathon.prophet.constant.FileConstants;
-import com.hackathon.prophet.pojo.SingleDtsBase;
-import jxl.Cell;
-import jxl.CellView;
+import com.hackathon.prophet.pojo.DtsBase;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
@@ -16,13 +14,11 @@ import org.apache.poi.util.IOUtils;
 import org.xml.sax.SAXException;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jxl.Sheet;
 import jxl.Workbook;
 
 public class ExcelUtils {
@@ -72,7 +68,7 @@ public class ExcelUtils {
         return result;
     }
 
-    public static void writeExcel(List<SingleDtsBase> records, File file) throws IOException, WriteException, RowsExceededException {
+    public static void writeExcel(List<DtsBase> records, File file) throws IOException, WriteException, RowsExceededException {
         WritableWorkbook workbook = null;
         try
         {
@@ -84,7 +80,7 @@ public class ExcelUtils {
         }
         WritableSheet sheet = workbook.createSheet("sheetName", 0);
         // add a blank row
-        for (SingleDtsBase record : records)
+        for (DtsBase record : records)
         {
             Label label1 = new Label(0,0,"id");
             sheet.addCell(label1);

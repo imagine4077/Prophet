@@ -3,8 +3,8 @@ package com.hackathon.prophet.atom.service.impl;
 import com.hackathon.prophet.atom.service.DistanceService;
 import com.hackathon.prophet.atom.service.FeatureService;
 import com.hackathon.prophet.dao.DataObject;
+import com.hackathon.prophet.pojo.DtsBase;
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
-import com.hackathon.prophet.pojo.SingleDtsBase;
 import com.hackathon.prophet.atom.service.HashService;
 import com.hackathon.prophet.utils.FileUtils;
 import javafx.util.Pair;
@@ -81,13 +81,13 @@ public class KmeansHashServiceImpl implements HashService
         {
             String center = getNearestCenter(feature);
             FileUtils.saveVector(center, feature, true);
-            SingleDtsBase dtsInfo = getDtsInfo(feature.getId(), dataObject);
+            DtsBase dtsInfo = getDtsInfo(feature.getId(), dataObject);
             FileUtils.saveDtsInfo(center, dtsInfo, true);
         }
     }
 
     @Override
-    public Pair<String, List<FeatureFingerPrint>> getHash( FeatureFingerPrint dts, SingleDtsBase dtsInfo, boolean append)
+    public Pair<String, List<FeatureFingerPrint>> getHash(FeatureFingerPrint dts, DtsBase dtsInfo, boolean append)
     {
         String center = getNearestCenter(dts);
         List<FeatureFingerPrint> ret = FileUtils.loadVectors(center);
@@ -122,13 +122,13 @@ public class KmeansHashServiceImpl implements HashService
         return idList.contains(dts.getId());
     }
 
-    private SingleDtsBase getDtsInfo(String dtsId, DataObject dataObject)
+    private DtsBase getDtsInfo(String dtsId, DataObject dataObject)
     {
         dataObject.resetPointer();
-        SingleDtsBase dts = null;
+        DtsBase dts = null;
         while(!dataObject.isDataEnd())
         {
-            dts = (SingleDtsBase) dataObject.getNextLine();
+            dts = (DtsBase) dataObject.getNextLine();
             if(dtsId.equalsIgnoreCase(dts.getId()))
             {
                 break;

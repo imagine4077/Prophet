@@ -4,17 +4,15 @@ package com.hackathon.prophet;
 import com.hackathon.prophet.atom.service.DimensionalityService;
 import com.hackathon.prophet.atom.service.FeatureService;
 import com.hackathon.prophet.atom.service.SegementationService;
-import com.hackathon.prophet.atom.service.impl.JiebaSegementationServiceImpl;
 import com.hackathon.prophet.atom.service.impl.PcaDimensionalityServiceImpl;
 import com.hackathon.prophet.atom.service.impl.WordBagFeatureServiceImpl;
 import com.hackathon.prophet.dao.DataObject;
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
-import com.hackathon.prophet.pojo.SingleDtsBase;
+import com.hackathon.prophet.pojo.DtsBase;
 import com.hackathon.prophet.utils.CollectionUtils;
 import com.hackathon.prophet.utils.ExcelUtils;
 import com.hackathon.prophet.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
 import java.util.*;
@@ -64,8 +62,8 @@ public class TestApplication
         System.out.println("==================================");
         File train = new File(TestApplication.class.getClassLoader().getResource("dummyTest.xlsx").getPath());
         String xml = "/TestMapper.xml";
-        List<SingleDtsBase> dtses = ExcelUtils.parse(train, SingleDtsBase.class, xml);
-        DataObject<SingleDtsBase> dataObject = new DataObject<>(dtses);
+        List<DtsBase> dtses = ExcelUtils.parse(train, DtsBase.class, xml);
+        DataObject<DtsBase> dataObject = new DataObject<>(dtses);
         while(!dataObject.isDataEnd()){
             System.out.println(dataObject.getNextLine());
         }
@@ -97,7 +95,7 @@ public class TestApplication
         List<double[]> trainMatrix = new ArrayList<>();
         while(!dataObject.isDataEnd())
         {
-            SingleDtsBase dts = dataObject.getNextLine();
+            DtsBase dts = dataObject.getNextLine();
             FeatureFingerPrint fingerPrint = featureService.getFeature(dts);
             trainMatrix.add(fingerPrint.getArrayFeature());
             System.out.println(fingerPrint);

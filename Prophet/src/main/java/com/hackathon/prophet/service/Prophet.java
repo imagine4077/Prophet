@@ -1,6 +1,6 @@
 package com.hackathon.prophet.service;
 
-import com.hackathon.prophet.pojo.SingleDtsBase;
+import com.hackathon.prophet.pojo.DtsBase;
 
 import java.util.List;
 
@@ -8,5 +8,5 @@ public interface Prophet
 {
     void init();
 
-    List<SingleDtsBase> getSimilarDts(SingleDtsBase dts);
+    List<DtsBase> getSimilarDts(DtsBase dts);
 }
