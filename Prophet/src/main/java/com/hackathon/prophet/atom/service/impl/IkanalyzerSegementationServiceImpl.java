@@ -3,6 +3,7 @@ package com.hackathon.prophet.atom.service.impl;
 import com.hackathon.prophet.atom.service.SegementationService;
 import org.apache.commons.io.FileUtils;
 import org.apache.coyote.Constants;
+import org.springframework.beans.factory.annotation.Value;
 import org.wltea.analyzer.core.IKSegmenter;
 import org.wltea.analyzer.core.Lexeme;
 
@@ -15,6 +16,9 @@ import java.util.List;
 public class IkanalyzerSegementationServiceImpl implements SegementationService {
     private static List<String> stopWordsList;
 
+    @Value("${stopword.usable:true}")
+    private boolean stopwordUsable;
+
     static
     {
         stopWordsList = getStopWordsList();
@@ -25,7 +29,7 @@ public class IkanalyzerSegementationServiceImpl implements SegementationService 
         return getAnalyzerResult(text);
     }
 
-    public static List<String> getAnalyzerResult(String input) {
+    public List<String> getAnalyzerResult(String input) {
         StringReader sr = new StringReader(input);
         IKSegmenter ik = new IKSegmenter(sr, true);//true is use smart
         Lexeme lex = null;
@@ -33,7 +37,7 @@ public class IkanalyzerSegementationServiceImpl implements SegementationService 
 
         try {
             while ((lex = ik.next()) != null) {
-                if (stopWordsList.contains(lex.getLexemeText())) {
+                if (this.stopwordUsable && stopWordsList.contains(lex.getLexemeText())) {
                     continue;
                 }
                 ret.add(lex.getLexemeText());
