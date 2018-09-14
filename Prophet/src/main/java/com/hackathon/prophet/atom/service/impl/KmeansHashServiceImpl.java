@@ -5,6 +5,7 @@ import com.hackathon.prophet.atom.service.FeatureService;
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
 import com.hackathon.prophet.pojo.SingleDtsBase;
 import com.hackathon.prophet.atom.service.HashService;
+import com.hackathon.prophet.utils.FileUtils;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,23 +25,45 @@ public class KmeansHashServiceImpl implements HashService
     @Value("${kmeans.cluster.num: 10}")
     private int clusterNum;
 
-    private Map<String, Pair<FeatureFingerPrint ,String>> kmeans = new HashMap<>();
+    private Map<String, FeatureFingerPrint> kmeans = new HashMap<>();
+
+    private String defaultCenter;
 
     @Override
-    public void initHashTable(List<SingleDtsBase> trainData)
+    public void initHashTable(List<FeatureFingerPrint> trainData)
     {
+        // 获得kmeans中心个数
+        clusterNum = clusterNum<trainData.size()? clusterNum:trainData.size();
+        // 从训练集中随机获得N个kmeans中心点
         int[] meansIndex = randomCommon(0, trainData.size(), clusterNum);
-        if(null == meansIndex) return;;
+        if(null == meansIndex) return;
+
+        // 初始化 this.kmeans，key为DTS单号，同时也是此类数据FingerPrint被保存所在文件名
         for(int index: meansIndex)
         {
+            FeatureFingerPrint feature = trainData.get(index);
+            kmeans.put(feature.getId(), feature);
+        }
+        this.defaultCenter = trainData.get(meansIndex[0]).getId();
 
+        // 对数据进行hash映射, 并将指纹存入对应对文件
+        for(FeatureFingerPrint feature: trainData)
+        {
+            String center = getNearestCenter(feature);
+            FileUtils.saveVector(center, feature, true);
         }
     }
 
     @Override
-    public List<SingleDtsBase> getHash( SingleDtsBase dts)
+    public List<FeatureFingerPrint> getHash( FeatureFingerPrint dts, boolean append)
     {
-        return null;
+        String center = getNearestCenter(dts);
+        List<FeatureFingerPrint> ret = FileUtils.loadVectors(center);
+        // 若新数据需要保存，则存入
+        if(append) {
+            FileUtils.saveVector(center, dts, append);
+        }
+        return ret;
     }
 
      /**
@@ -71,5 +94,22 @@ public class KmeansHashServiceImpl implements HashService
             }
         }
         return result;
+    }
+
+    private String getNearestCenter(FeatureFingerPrint feature)
+    {
+        double nearestDis = Double.POSITIVE_INFINITY;
+        String nearestKey = this.defaultCenter;
+        for(FeatureFingerPrint center: this.kmeans.values())
+        {
+            double dis = this.distanceService.getDistance(feature.getArrayFeature(), center.getArrayFeature());
+            if(nearestDis>dis)
+            {
+                nearestDis = dis;
+                nearestKey = center.getId();
+            }
+        }
+
+        return nearestKey;
     }
 }

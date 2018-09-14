@@ -49,7 +49,7 @@ public class PcaDimensionalityServiceImpl implements DimensionalityService
 
     // 对primaryArray矩阵做PCA降维
     @Override
-    public Matrix getReducedMatrix(double[][] primaryArray){
+    public Matrix getReducedVectors(double[][] primaryArray){
         Matrix result = getResult(primaryArray, this.principalMatrix);
         return result;
     }

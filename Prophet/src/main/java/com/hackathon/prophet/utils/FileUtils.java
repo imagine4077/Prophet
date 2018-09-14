@@ -18,10 +18,13 @@ public class FileUtils
 
     private static final String SEPERATOR2 = ",";
 
+    private static final String BASE_DIR = FileUtils.class.getClassLoader().getResource(".").getPath().toString();
+
     /**
      * 保存word bag的hash指纹
      */
-    public static void saveVector(File file, FeatureFingerPrint feature) {
+    public static void saveVector(String fileName, FeatureFingerPrint feature, boolean append) {
+        File file = new File(BASE_DIR+fileName);
         String data = encodeVector(feature);
         synchronized (Lock) {
             BufferedWriter bw = null;
@@ -30,7 +33,7 @@ public class FileUtils
                 {
                     file.createNewFile();
                 }
-                bw = new BufferedWriter(new FileWriter(file.toString(), true));
+                bw = new BufferedWriter(new FileWriter(file.toString(), append));
                 bw.write(data);
                 bw.newLine();
                 bw.close();
@@ -44,8 +47,9 @@ public class FileUtils
         }
     }
 
-    public static List<FeatureFingerPrint> loadVectors(File file)
+    public static List<FeatureFingerPrint> loadVectors(String fileName)
     {
+        File file = new File(BASE_DIR+fileName);
         List<FeatureFingerPrint> ret = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(file.toString())))
         {

@@ -72,14 +72,14 @@ public class TestApplication
 
         // Test file input and output
         System.out.println("==================================");
-        File hashFile = new File(TestApplication.class.getClassLoader().getResource(".").getPath().toString() + "feature.txt");
+        //File hashFile = new File(TestApplication.class.getClassLoader().getResource(".").getPath().toString() + "feature.txt");
         double[] arr1 = {1.1, 2.2, 3.3};
         double[] arr2 = {1.1, 1.2, 1.3};
-        FileUtils.saveVector(hashFile, new FeatureFingerPrint("Dts1", arr1));
-        FileUtils.saveVector(hashFile, new FeatureFingerPrint("Dts2", arr1));
-        FileUtils.saveVector(hashFile, new FeatureFingerPrint("Dts3", arr2));
+        FileUtils.saveVector("feature.txt", new FeatureFingerPrint("Dts1", arr1), true);
+        FileUtils.saveVector("feature.txt", new FeatureFingerPrint("Dts2", arr1), true);
+        FileUtils.saveVector("feature.txt", new FeatureFingerPrint("Dts3", arr2), true);
 
-        List<FeatureFingerPrint> featureFingerPrints = FileUtils.loadVectors(hashFile);
+        List<FeatureFingerPrint> featureFingerPrints = FileUtils.loadVectors("feature.txt");
         for (FeatureFingerPrint f: featureFingerPrints)
         {
             System.out.println(f);

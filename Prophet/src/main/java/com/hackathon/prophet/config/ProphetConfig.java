@@ -1,9 +1,6 @@
 package com.hackathon.prophet.config;
 
-import com.hackathon.prophet.atom.service.DimensionalityService;
-import com.hackathon.prophet.atom.service.DistanceService;
-import com.hackathon.prophet.atom.service.FeatureService;
-import com.hackathon.prophet.atom.service.SegementationService;
+import com.hackathon.prophet.atom.service.*;
 import com.hackathon.prophet.atom.service.impl.*;
 import com.hackathon.prophet.dao.DataIO;
 import com.hackathon.prophet.dao.impl.ExcelDataIoImpl;
@@ -69,5 +66,11 @@ public class ProphetConfig
     public DimensionalityService dimensionalityServiceBean()
     {
         return new PcaDimensionalityServiceImpl();
+    }
+
+    @Bean
+    public HashService hashServiceBean()
+    {
+        return new KmeansHashServiceImpl();
     }
 }
