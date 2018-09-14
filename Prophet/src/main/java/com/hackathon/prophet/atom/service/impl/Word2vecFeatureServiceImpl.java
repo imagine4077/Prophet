@@ -12,6 +12,7 @@ import com.hackathon.prophet.utils.FileUtils;
 import com.hackathon.prophet.utils.HtmlUtils;
 import com.hackathon.prophet.word2vec.Word2VEC;
 import com.hackathon.prophet.word2vec.Word2vecLearn;
+import groovy.lang.Singleton;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,20 +25,23 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@Singleton
 public class Word2vecFeatureServiceImpl implements FeatureService
 {
     private static Object writeLock = new Object();
 
-    private static Map<String, Double> wordBag = null;
+    private static Map<String, double[]> wordBag = null;
 
-    private static String RAW_WORDS_FILE = "rawWords.txt";
+    private static final String RAW_WORDS_FILE = "rawWords.txt";
 
-    private static String WORD2VEC_MODEL = "word2vec_model";
+    private static final String WORD2VEC_MODEL = "word2vec_model";
+
+    private final String modelDir = FileUtils.BASE_DIR + WORD2VEC_MODEL;
 
     @Getter
     private DataObject dataObject;
 
-    private String modelDir = FileUtils.BASE_DIR + WORD2VEC_MODEL;
+    private Word2VEC word2Vec = new Word2VEC();
 
     @Value("${feature.dimension:10000}")
     private int dimension;
@@ -53,7 +57,7 @@ public class Word2vecFeatureServiceImpl implements FeatureService
 
     @Override
     public FeatureFingerPrint getFeature(SingleDtsBase dts) {
-        /*//若词袋未初始化，则初始化
+        //若词袋未初始化，则初始化
         if(null == wordBag)
         {
             this.getWordBag();
@@ -61,19 +65,21 @@ public class Word2vecFeatureServiceImpl implements FeatureService
 
         double[] feature = new double[this.dimension];
 
+        int i = 0;
         for(String word:this.descriptionWordSegment(dts))
         {
-            if(wordBag.contains(word))
+            if(wordBag.containsKey(word))
             {
-                int index = wordBag.indexOf(word);
-                feature[index] = feature[index]+1F;
+                feature = vecAdd(feature, wordBag.get(word));
+                i++;
             }
         }
-        return new FeatureFingerPrint(dts.getId(), feature);*/
+        return new FeatureFingerPrint(dts.getId(), vecDividNum(feature, i));
     }
 
     @Override
     public List<String> getWordBag() {
+        List<String> ret = null;
         if (null == wordBag) {
             synchronized (writeLock) {
                 // 将数据分词，并存入文本，用于训练WORD2VEC模型
@@ -83,7 +89,6 @@ public class Word2vecFeatureServiceImpl implements FeatureService
                     FileUtils.saveSegmentForWord2vec(RAW_WORDS_FILE, dtsWords, true);
                 }
                 Word2vecLearn learn = new Word2vecLearn();
-                Word2VEC vec = new Word2VEC();
                 long start = System.currentTimeMillis();
                 try {
                     // 训练word2vec模型
@@ -92,32 +97,18 @@ public class Word2vecFeatureServiceImpl implements FeatureService
                     learn.saveModel(new File(this.modelDir));
 
                     // 加载word2vec模型
-                    vec.loadJavaModel(this.modelDir);
+                    this.word2Vec.loadJavaModel(this.modelDir);
+                    wordBag = this.word2Vec.getDoubleWordMap();
                 }catch (IOException e){}
 
-
-
-                // reduce dimension by config
-                tmpMap = CollectionUtils.mapSortByValueAsc(tmpMap);
-                this.dimension = this.dimension>tmpMap.size()?tmpMap.size(): this.dimension;
-                idf = new LinkedHashMap<>();
-                int i = 0;
-                for (Map.Entry<String, Integer> entry : tmpMap.entrySet()) {
-                    // FIXME 在全体训练集中仅出现一次的词，我们认为可能是无意义词,不统计这样的词，用以降维
-                    if(entry.getValue()>1)
-                    {
-                        idf.put(entry.getKey(), entry.getValue());
-                        i++;
-                    }
-                    if (i >= this.dimension) {
-                        break;
-                    }
-                }
-                wordBag = new ArrayList<>(idf.keySet());
             }
-            this.dimension = wordBag.size();
+            ret = new ArrayList<String>(wordBag.keySet());
+            this.dimension = wordBag.get(ret.get(0)).length;
         }
-        return wordBag;
+        else {
+            ret = new ArrayList<String>(wordBag.keySet());
+        }
+        return ret;
     }
 
     @Override
@@ -134,5 +125,33 @@ public class Word2vecFeatureServiceImpl implements FeatureService
             words.addAll(segementationService.segmentWords(HtmlUtils.deleteAllHTMLTag(dts.getSimpleDescription())));
             return words;
         }
+    }
+
+    private double[] vecAdd(double[] vec1, double[] vec2)
+    {
+        if(vec1.length != this.dimension || vec2.length != this.dimension)
+        {
+            return null;
+        }
+        double[] result = new double[this.dimension];
+        for(int i=0;i<this.dimension;i++){
+            result[i] = vec1[i] + vec2[i];
+        }
+        return result;
+    }
+
+    private double[] vecDividNum(double[] vec, int n)
+    {
+        double[] result = new double[vec.length];
+        if(n==0)
+        {
+            System.out.println("word2vec divid 0: no feature word exist");
+            return result;
+        }
+        for(int i=0;i<vec.length;i++)
+        {
+            result[i] = result[i]/n;
+        }
+        return result;
     }
 }

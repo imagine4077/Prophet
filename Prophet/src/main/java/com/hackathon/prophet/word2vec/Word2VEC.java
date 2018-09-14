@@ -3,6 +3,7 @@ package com.hackathon.prophet.word2vec;
 import com.hackathon.prophet.word2vec.domain.WordEntry;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class Word2VEC {
@@ -48,6 +49,8 @@ public class Word2VEC {
 
     private HashMap<String, float[]> wordMap = new HashMap<String, float[]>();
 
+    private HashMap<String, double[]> doubleWordMap = new HashMap<>();
+
     private int words;
     private int size;
     private int topNSize = 40;
@@ -89,6 +92,7 @@ public class Word2VEC {
                 }
 
                 wordMap.put(word, vectors);
+                doubleWordMap.put(word, float2double(vectors));
                 dis.read();
             }
         } finally {
@@ -129,6 +133,7 @@ public class Word2VEC {
                     value[j] /= len;
                 }
                 wordMap.put(key, value);
+                doubleWordMap.put(key, float2double(value));
             }
 
         }
@@ -289,11 +294,22 @@ public class Word2VEC {
      */
     public float[] getWordVector(String word)
     {
-        if(!wordMap.containsKey(word))
+        return wordMap.get(word);
+    }
+
+    /**
+     * 得到词向量
+     *
+     * @param word
+     * @return
+     */
+    public double[] getDoubleWordVector(String word)
+    {
+        if(!doubleWordMap.containsKey(word))
         {
             return null;
         }
-        return wordMap.get(word);
+        return doubleWordMap.get(word);
     }
 
     public static float readFloat(InputStream is) throws IOException {
@@ -356,12 +372,28 @@ public class Word2VEC {
         return wordMap;
     }
 
+    public HashMap<String, double[]> getDoubleWordMap() {
+        return doubleWordMap;
+    }
+
     public int getWords() {
         return words;
     }
 
     public int getSize() {
         return size;
+    }
+
+    private double[] float2double(float[] vec)
+    {
+        double[] ret = new double[vec.length];
+        for(int i=0; i<vec.length; i++)
+        {
+            BigDecimal b = new BigDecimal(String.valueOf(vec[i]));
+            double d = b.doubleValue();
+            ret[i] = d;
+        }
+        return ret;
     }
 
 }

@@ -87,7 +87,7 @@ public class TestApplication
 
         // Test PCA
         WordBagFeatureServiceImpl featureService = new WordBagFeatureServiceImpl();
-        featureService.init();
+        featureService.init(dataObject);
 
 
         List<String> wordBag = featureService.getWordBag();
