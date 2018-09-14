@@ -59,6 +59,8 @@ public class NormalProphetImpl implements Prophet
     {
         // 获取训练集数据
         DataObject dataObject = dataIO.readTrainSet();
+        // 初始化FeatureService
+        this.featureService.init(dataObject);
         // 初始化训练集FeatureFingerPrint，并存入this.trainSetfingerPrints。获得的double矩阵，可用于主成分分析
         double[][] trainMatrix = getTrainMatrix(dataObject);
 

@@ -1,15 +1,28 @@
 package com.hackathon.prophet.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class SingleDtsBase
 {
+    @JsonProperty(value = "id")
     private String id;
+
+    @JsonProperty(value = "severity")
     private String severity;
+
+    @JsonProperty(value = "reappearable")
     private String reappearable;
+
+    @JsonProperty(value = "simpleDescription")
     private String simpleDescription;
+
+    @JsonProperty(value = "detailDescription")
     private String detailDescription;
+
+    @JsonIgnore
     private String similarDts;
 
     /*public SingleDtsBase(String id, String severity

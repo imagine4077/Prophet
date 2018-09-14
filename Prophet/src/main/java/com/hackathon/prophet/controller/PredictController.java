@@ -1,12 +1,12 @@
 package com.hackathon.prophet.controller;
 
 import com.hackathon.prophet.pojo.SingleDtsBase;
+import com.hackathon.prophet.service.Prophet;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
@@ -14,13 +14,26 @@ import java.util.List;
 @Controller
 public class PredictController
 {
+    @Autowired
+    private Prophet prophet;
+
     @ResponseBody
-    @RequestMapping(value = "similarities", method = RequestMethod.GET)
+    @RequestMapping(value = "url/similarities", method = RequestMethod.GET)
     public ResponseEntity<List<SingleDtsBase>> findSimilarDtsByUrl(
             @RequestParam(name = "url") String url
     )
     {
         return null;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "similarities", method = RequestMethod.POST)
+    public ResponseEntity<List<SingleDtsBase>> findSimilarDts(
+            @RequestBody SingleDtsBase dts
+    )
+    {
+        List<SingleDtsBase> result = this.prophet.getSimilarDts(dts);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 }
