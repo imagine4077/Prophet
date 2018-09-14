@@ -28,7 +28,7 @@ public class WordBagFeatureServiceImpl implements FeatureService {
     @Getter
     private DataObject dataObject;
 
-    @Value("${feature.dimension:50000}")
+    @Value("${feature.dimension:10000}")
     private int dimension;
 
     @Autowired
@@ -63,7 +63,7 @@ public class WordBagFeatureServiceImpl implements FeatureService {
 
     @Override
     public List<String> getWordBag() {
-        if (null == wordBag) {
+        if (null == this.wordBag) {
             synchronized (writeLock) {
                 Map<String, Integer> tmpMap = new LinkedHashMap<>();
                 while (!this.dataObject.isDataEnd()) {
@@ -94,16 +94,16 @@ public class WordBagFeatureServiceImpl implements FeatureService {
                         break;
                     }
                 }
-                wordBag = new ArrayList<>(idf.keySet());
+                this.wordBag = new ArrayList<>(idf.keySet());
             }
-            this.dimension = wordBag.size();
+            this.dimension = this.wordBag.size();
         }
-        return wordBag;
+        return this.wordBag;
     }
 
-    @PostConstruct
-    public void init() {
-        this.dataObject = dataIO.readTrainSet();
+    @Override
+    public void init(DataObject dataObject) {
+        this.dataObject = dataObject;
         this.getWordBag();
     }
 

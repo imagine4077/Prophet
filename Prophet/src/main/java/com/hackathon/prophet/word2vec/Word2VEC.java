@@ -287,7 +287,12 @@ public class Word2VEC {
      * @param word
      * @return
      */
-    public float[] getWordVector(String word) {
+    public float[] getWordVector(String word)
+    {
+        if(!wordMap.containsKey(word))
+        {
+            return null;
+        }
         return wordMap.get(word);
     }
 

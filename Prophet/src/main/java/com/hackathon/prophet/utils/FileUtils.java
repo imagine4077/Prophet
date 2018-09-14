@@ -14,13 +14,13 @@ public class FileUtils
 {
     private static final Object Lock = new Object();
 
-    private static final String SEPERATOR1 = "/";
+    private static final String SEPERATOR1 = "/*prophet*/";
 
     private static final String SEPERATOR2 = ",";
 
     private static final String DTS_INFO_FILE_SUFFIX = "_dts_info";
 
-    private static final String BASE_DIR = FileUtils.class.getClassLoader().getResource(".").getPath().toString();
+    public static final String BASE_DIR = FileUtils.class.getClassLoader().getResource(".").getPath().toString();
 
     /**
      * 保存word bag的hash指纹
@@ -125,7 +125,8 @@ public class FileUtils
     /**
      * 保存词数据用于word2vec学习
      */
-    public static void saveSegmentForWord2vec(File file, List<String> words, boolean append) {
+    public static void saveSegmentForWord2vec(String filename, List<String> words, boolean append) {
+        File file = new File(BASE_DIR + filename);
         String data = convertWordsToLineData(words);
         synchronized (Lock) {
             BufferedWriter bw = null;

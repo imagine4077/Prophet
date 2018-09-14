@@ -49,7 +49,7 @@ public class NormalProphetImpl implements Prophet
     @Value("${distance.threshold:1}")
     private double distanceThreashold;
 
-    private DataObject dataObject;
+    //private DataObject dataObject;
 
     private List<FeatureFingerPrint> trainSetFingerPrints = new LinkedList<>();
 
@@ -106,6 +106,9 @@ public class NormalProphetImpl implements Prophet
     // 获取训练集矩阵
     private double[][] getTrainMatrix(DataObject dataObject)
     {
+        //重置训练集指针
+        dataObject.resetPointer();
+
         List<double[]> trainMatrix = new ArrayList<>();
         while(!dataObject.isDataEnd())
         {

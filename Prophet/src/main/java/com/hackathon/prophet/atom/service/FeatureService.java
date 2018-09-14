@@ -1,5 +1,6 @@
 package com.hackathon.prophet.atom.service;
 
+import com.hackathon.prophet.dao.DataObject;
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
 import com.hackathon.prophet.pojo.SingleDtsBase;
 
@@ -16,4 +17,7 @@ public interface FeatureService
      * 获得词袋
      * */
     List<String> getWordBag();
+
+    // 初始化
+    public void init(DataObject dataObject);
 }
