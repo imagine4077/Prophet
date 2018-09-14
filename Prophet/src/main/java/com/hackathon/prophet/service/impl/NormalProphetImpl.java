@@ -1,23 +1,20 @@
 package com.hackathon.prophet.service.impl;
 
-import com.hackathon.prophet.atom.service.DimensionalityService;
-import com.hackathon.prophet.atom.service.FeatureService;
-import com.hackathon.prophet.atom.service.HashService;
-import com.hackathon.prophet.atom.service.SegementationService;
+import com.hackathon.prophet.atom.service.*;
 import com.hackathon.prophet.dao.DataIO;
 import com.hackathon.prophet.dao.DataObject;
 import com.hackathon.prophet.pojo.FeatureFingerPrint;
 import com.hackathon.prophet.pojo.SingleDtsBase;
 import com.hackathon.prophet.service.Prophet;
+import com.hackathon.prophet.utils.CollectionUtils;
+import com.hackathon.prophet.utils.FileUtils;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.print.attribute.standard.Finishings;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class NormalProphetImpl implements Prophet
@@ -35,10 +32,22 @@ public class NormalProphetImpl implements Prophet
     private DataIO dataIO;
 
     @Autowired
+    private DistanceService distanceService;
+
+    @Autowired
     private HashService hashService;
 
     @Value("${feature.reduce:true}")
     private boolean featureReduce;
+
+    @Value("${append.received.data:true}")
+    private boolean appendData;
+
+    @Value("${knn.num:3}")
+    private int knnNum;
+
+    @Value("${distance.threshold:1}")
+    private double distanceThreashold;
 
     private DataObject dataObject;
 
@@ -49,12 +58,12 @@ public class NormalProphetImpl implements Prophet
     public void init()
     {
         // 获取训练集数据
-        this.dataObject = dataIO.readTrainSet();
+        DataObject dataObject = dataIO.readTrainSet();
         // 初始化训练集FeatureFingerPrint，并存入this.trainSetfingerPrints。获得的double矩阵，可用于主成分分析
-        double[][] trainMatrix = getTrainMatrix();
+        double[][] trainMatrix = getTrainMatrix(dataObject);
 
         // 需要降维的场景所需做的降维处理
-        if(featureReduce) {
+        if(this.featureReduce) {
             // 获取PCA主成分、获取转换矩阵
             pca.trainTransformMatrix(trainMatrix);
 
@@ -70,14 +79,32 @@ public class NormalProphetImpl implements Prophet
         }
 
         //重置训练集指针
-        this.dataObject.resetPointer();
+        dataObject.resetPointer();
 
         // 对训练集数据做Hash处理
+        hashService.initHashTable(this.trainSetFingerPrints, dataObject);
 
     }
 
+    @Override
+    public List<SingleDtsBase> getSimilarDts(SingleDtsBase dts)
+    {
+        // 获得DTS指纹
+        FeatureFingerPrint fingerPrint;
+        if(this.featureReduce)
+        {
+            fingerPrint = dtsToReducedFeatureFingerPrint(dts);
+        }
+        else {
+            fingerPrint = dtsToUnreducedFeatureFingerPrint(dts);
+        }
+
+        //求LSH
+        return getLsh(fingerPrint, dts);
+    }
+
     // 获取训练集矩阵
-    private double[][] getTrainMatrix()
+    private double[][] getTrainMatrix(DataObject dataObject)
     {
         List<double[]> trainMatrix = new ArrayList<>();
         while(!dataObject.isDataEnd())
@@ -109,5 +136,35 @@ public class NormalProphetImpl implements Prophet
     private FeatureFingerPrint dtsToUnreducedFeatureFingerPrint(SingleDtsBase dts)
     {
         return featureService.getFeature(dts);
+    }
+
+    private List<SingleDtsBase> getLsh(FeatureFingerPrint fingerPrint, SingleDtsBase dtsInfo){
+        // 获得哈希值
+        Pair<String, List<FeatureFingerPrint>> hashedPair = hashService.getHash(fingerPrint, dtsInfo, this.appendData);
+        String center = hashedPair.getKey();
+
+        Map<String, Double> distanceMap = new HashMap<>();
+        for(FeatureFingerPrint hashedFeature: hashedPair.getValue())
+        {
+            distanceMap.put(hashedFeature.getId(),
+                    this.distanceService.getDistance(fingerPrint.getArrayFeature(), hashedFeature.getArrayFeature()));
+        }
+
+        // 降序排序所有距离
+        distanceMap = CollectionUtils.mapSortByValueDesc(distanceMap);
+
+        // 抽取K近邻
+        int i = 0;
+        List<SingleDtsBase> ret = new ArrayList<>();
+        for(Map.Entry<String, Double> entry: distanceMap.entrySet())
+        {
+            if(i<this.knnNum && entry.getValue()<this.distanceThreashold)
+            {
+                SingleDtsBase similarDts = FileUtils.loadDtsInfo(center, entry.getKey());
+                ret.add(similarDts);
+            }
+        }
+
+        return ret;
     }
 }
